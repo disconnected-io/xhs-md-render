@@ -2,8 +2,43 @@ const { marked } = require("marked");
 const puppeteer = require("puppeteer-core");
 const fs = require("fs");
 
+// Parse --cover argument
+let coverId = "cream-red"; // default
+for (let i = 2; i < process.argv.length; i++) {
+  if (process.argv[i].startsWith("--cover=")) {
+    coverId = process.argv[i].split("=")[1];
+  }
+}
+
 const mdPath = process.argv[2];
-if (!mdPath) { console.error("Usage: node render.js <markdown-file>"); process.exit(1); }
+if (!mdPath) { console.error("Usage: node render.js <markdown-file> [--cover=template-id]"); process.exit(1); }
+
+// Cover templates (must match preview.js)
+const TEMPLATES = {
+  "cream-red":    { name:"米白·红线", bg:"#fdf8f0", accent:"#d44444", accent2:"#c75b20", text:"#1a1a1a",
+    geo: `<div style="position:absolute;width:280px;height:280px;border-radius:50%;border:3px solid rgba(212,68,68,0.12);top:-60px;right:-60px"></div><div style="position:absolute;width:180px;height:180px;border-radius:50%;border:3px solid rgba(199,91,32,0.10);bottom:-50px;left:-50px"></div><div style="position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(212,68,68,0.06);top:50%;right:80px"></div><div style="position:absolute;width:16px;height:16px;border-radius:50%;background:rgba(199,91,32,0.25);top:180px;left:100px"></div><div style="position:absolute;width:10px;height:10px;border-radius:50%;background:rgba(212,68,68,0.2);bottom:240px;right:140px"></div><div style="position:absolute;width:80px;height:2px;background:rgba(212,68,68,0.12);top:220px;right:180px;transform:rotate(-30deg)"></div>` },
+  "cream-orange": { name:"米白·暖橙", bg:"#faf5ee", accent:"#e87830", accent2:"#cc5533", text:"#1a1a1a",
+    geo: `<div style="position:absolute;width:180px;height:180px;border-radius:50%;border:3px solid rgba(232,120,48,0.1);top:-40px;right:60px"></div><div style="position:absolute;width:120px;height:120px;border-radius:50%;border:2px solid rgba(204,85,51,0.08);top:50%;right:-30px"></div><div style="position:absolute;width:60px;height:60px;border-radius:50%;background:rgba(232,120,48,0.06);top:60%;right:80px"></div><div style="position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(204,85,51,0.25);top:200px;left:60px"></div><div style="position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(232,120,48,0.2);top:280px;right:120px"></div>` },
+  "cream-leaf":   { name:"米白·青叶", bg:"#f6faf3", accent:"#2e7d32", accent2:"#558b2f", text:"#1a1a1a",
+    geo: `<div style="position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(46,125,50,0.06) 0%,transparent 70%);top:-80px;right:-80px"></div><div style="position:absolute;width:160px;height:160px;border-radius:50%;border:3px solid rgba(85,139,47,0.08);bottom:-40px;left:-40px"></div><div style="position:absolute;width:10px;height:10px;border-radius:50%;background:rgba(46,125,50,0.2);top:150px;left:100px"></div><div style="position:absolute;width:70px;height:2px;background:rgba(46,125,50,0.12);top:240px;right:160px;transform:rotate(-15deg)"></div>` },
+  "cream-ink":    { name:"米白·墨点", bg:"#fdfaf6", accent:"#1a1a2e", accent2:"#c75b20", text:"#1a1a1a",
+    geo: `<div style="position:absolute;width:16px;height:16px;border-radius:50%;background:rgba(26,26,46,0.08);top:100px;right:120px"></div><div style="position:absolute;width:10px;height:10px;border-radius:50%;background:rgba(26,26,46,0.1);top:180px;right:80px"></div><div style="position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(199,91,32,0.18);top:160px;right:160px"></div><div style="position:absolute;width:12px;height:12px;border-radius:50%;background:rgba(26,26,46,0.06);top:280px;right:200px"></div><div style="position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(199,91,32,0.15);top:350px;right:100px"></div>` },
+  "dark-red":     { name:"暗夜·绯红", bg:"#0f0f1f", accent:"#ff6b6b", accent2:"#ffa94d", text:"#ebeaf0",
+    geo: `<div style="position:absolute;width:240px;height:240px;border-radius:50%;border:3px solid rgba(255,107,107,0.1);top:-50px;right:-50px"></div><div style="position:absolute;width:100px;height:100px;border-radius:50%;background:rgba(255,169,77,0.04);top:40%;right:60px"></div><div style="position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(255,107,107,0.3);top:200px;left:80px"></div><div style="position:absolute;width:60px;height:2px;background:rgba(255,169,77,0.15);top:160px;right:120px;transform:rotate(20deg)"></div>` },
+  "dark-gold":    { name:"暗夜·金辉", bg:"#0d0d1a", accent:"#ffa94d", accent2:"#ffd43b", text:"#ebeaf0",
+    geo: `<div style="position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(255,169,77,0.08) 0%,transparent 60%);top:-40px;right:40px"></div><div style="position:absolute;width:140px;height:140px;border-radius:50%;border:2px solid rgba(255,212,59,0.08);bottom:60px;right:-30px"></div><div style="position:absolute;width:10px;height:10px;border-radius:50%;background:rgba(255,169,77,0.25);top:180px;left:90px"></div><div style="position:absolute;width:6px;height:6px;border-radius:50%;background:rgba(255,212,59,0.3);bottom:200px;right:160px"></div>` },
+  "dark-purple":  { name:"暗夜·紫雾", bg:"#0f0a1a", accent:"#b388ff", accent2:"#e040fb", text:"#ebeaf0",
+    geo: `<div style="position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(179,136,255,0.06) 0%,transparent 65%);top:-60px;right:-40px"></div><div style="position:absolute;width:160px;height:160px;border-radius:50%;border:2px solid rgba(224,64,251,0.08);bottom:-30px;left:-30px"></div><div style="position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(179,136,255,0.25);top:200px;right:140px"></div><div style="position:absolute;width:50px;height:2px;background:rgba(224,64,251,0.12);top:300px;left:120px;transform:rotate(-35deg)"></div>` },
+  "dark-teal":    { name:"暗夜·青蓝", bg:"#0a1218", accent:"#64ffda", accent2:"#00bcd4", text:"#ebeaf0",
+    geo: `<div style="position:absolute;width:230px;height:230px;border-radius:50%;border:3px solid rgba(100,255,218,0.08);top:-50px;right:80px"></div><div style="position:absolute;width:130px;height:130px;border-radius:50%;background:rgba(0,188,212,0.04);bottom:80px;right:-20px"></div><div style="position:absolute;width:10px;height:10px;border-radius:50%;background:rgba(100,255,218,0.25);top:220px;left:100px"></div><div style="position:absolute;width:70px;height:2px;background:rgba(0,188,212,0.12);top:260px;right:140px;transform:rotate(15deg)"></div>` },
+  "white-red":    { name:"纯白·炽红", bg:"#ffffff", accent:"#e53935", accent2:"#ff6f00", text:"#111111",
+    geo: `<div style="position:absolute;width:200px;height:200px;border-radius:50%;border:3px solid rgba(229,57,53,0.08);top:-40px;right:-40px"></div><div style="position:absolute;width:12px;height:12px;border-radius:50%;background:rgba(229,57,53,0.2);top:200px;left:80px"></div><div style="position:absolute;width:80px;height:2px;background:rgba(255,111,0,0.1);top:160px;right:120px;transform:rotate(-20deg)"></div>` },
+  "white-blue":   { name:"纯白·科技蓝", bg:"#fafcff", accent:"#1565c0", accent2:"#0d47a1", text:"#111111",
+    geo: `<div style="position:absolute;width:180px;height:180px;border-radius:50%;border:3px solid rgba(21,101,192,0.08);top:30px;right:60px"></div><div style="position:absolute;width:100px;height:100px;border-radius:50%;border:2px solid rgba(13,71,161,0.06);bottom:100px;right:80px"></div><div style="position:absolute;width:8px;height:8px;border-radius:50%;background:rgba(21,101,192,0.2);top:200px;left:100px"></div><div style="position:absolute;width:60px;height:2px;background:rgba(21,101,192,0.1);top:260px;right:120px;transform:rotate(-15deg)"></div>` },
+};
+
+const coverT = TEMPLATES[coverId] || TEMPLATES["cream-red"];
+console.log(`Cover template: ${coverT.name} (${coverId})`);
 
 marked.setOptions({ gfm: true, breaks: true });
 
@@ -171,66 +206,17 @@ const wrap = (body) =>
     body{
       width:${W}px;height:${H}px;
       font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC","Heiti SC",sans-serif;
-      background:#fdf8f0;
+      background:${coverT.bg};color:${coverT.text};
       display:flex;flex-direction:column;justify-content:center;align-items:flex-start;
       text-align:left;padding:40px 60px;position:relative;overflow:hidden;
     }
-    .geo1{
-      position:absolute;width:300px;height:300px;border-radius:50%;
-      border:3px solid rgba(212,68,68,0.10);
-      top:-80px;right:-80px;
-    }
-    .geo2{
-      position:absolute;width:200px;height:200px;border-radius:50%;
-      border:3px solid rgba(199,91,32,0.08);
-      bottom:-60px;right:120px;
-    }
-    .geo3{
-      position:absolute;width:80px;height:80px;border-radius:50%;
-      background:rgba(212,68,68,0.05);
-      top:45%;right:60px;
-    }
-    .geo4{
-      position:absolute;width:14px;height:14px;border-radius:50%;
-      background:rgba(199,91,32,0.2);
-      top:120px;right:180px;
-    }
-    .geo5{
-      position:absolute;width:8px;height:8px;border-radius:50%;
-      background:rgba(212,68,68,0.15);
-      bottom:200px;right:100px;
-    }
-    .line1{
-      position:absolute;width:100px;height:2px;
-      background:rgba(212,68,68,0.1);
-      top:160px;right:140px;transform:rotate(-25deg);
-    }
-    .kw{
-      font-size:44px;font-weight:900;letter-spacing:8px;color:#c75b20;
-      margin-bottom:32px;text-transform:uppercase;position:relative;z-index:1;
-    }
-    .q{
-      font-size:80px;font-weight:900;line-height:1.2;letter-spacing:1px;
-      margin-bottom:0;color:#d44444;position:relative;z-index:1;
-    }
-    .punch{
-      font-size:150px;font-weight:900;line-height:1;
-      color:#cc3333;position:relative;z-index:1;
-      margin:0;
-    }
-    .tag{
-      font-size:64px;font-weight:900;letter-spacing:10px;
-      color:#c75b20;margin-top:12px;position:relative;z-index:1;
-    }
-    .bar{
-      width:120px;height:5px;border-radius:2px;
-      background:#d44444;
-      margin-top:6px;position:relative;z-index:1;
-    }
+    .kw{font-size:44px;font-weight:900;letter-spacing:8px;color:${coverT.accent2};margin-bottom:32px;text-transform:uppercase;position:relative;z-index:1}
+    .q{font-size:80px;font-weight:900;line-height:1.2;letter-spacing:1px;margin-bottom:0;color:${coverT.accent};position:relative;z-index:1}
+    .punch{font-size:150px;font-weight:900;line-height:1;color:${coverT.accent};position:relative;z-index:1;margin:0}
+    .tag{font-size:64px;font-weight:900;letter-spacing:10px;color:${coverT.accent2};margin-top:12px;position:relative;z-index:1}
+    .bar{width:120px;height:5px;border-radius:2px;background:${coverT.accent};margin-top:6px;position:relative;z-index:1}
   </style></head><body>
-    <div class="geo1"></div><div class="geo2"></div><div class="geo3"></div>
-    <div class="geo4"></div><div class="geo5"></div>
-    <div class="line1"></div>
+    ${coverT.geo}
     <div class="kw">CLAUDE CODE  ×  DEEPSEEK</div>
     <div class="q">你可能根本没在</div>
     <div class="q">Claude Code 开启</div>
