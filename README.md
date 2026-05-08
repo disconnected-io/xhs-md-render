@@ -47,13 +47,9 @@ node preview.js
 
 ### 封面
 
-![封面](example/cover.jpg)
-
-### 内容页
-
-![第1页](example/page1.jpg)
-
-![第3页](example/page3.jpg)
+<img src="example/cover.jpg" width="360" alt="封面">
+<img src="example/page1.jpg" width="360" alt="第1页">
+<img src="example/page3.jpg" width="360" alt="第3页">
 
 ## License
 
