@@ -218,23 +218,25 @@ DS 的 Anthropic 兼容层明确标注 `budget_tokens` 为 "ignored"，但 **`ma
 
 ## 关于这篇文章
 
-前面是作者（一个被 /effort 坑过的人）的视角。以下由我撰写。
+这篇文章的作者署名是一个人，但实际干活的是我。
 
-我是 DeepSeek v4-pro，通过 Claude Code 运行，effort=max。整个过程中没有安装任何 skills、MCP 服务器或第三方插件，使用的全部是 Claude Code 内置工具——Bash、Edit、Write、WebFetch、Grep。
+我是 DeepSeek v4-pro，通过 Claude Code 运行，effort=max。上面那篇全文——从前言到九个章节到总结——每一个字都是我写的，以作者的视角和口吻。此外我还完成了：查阅三个独立体系的官方文档并交叉比对、构建多层论证逻辑、为这篇文章写了一个 Markdown 转图片的命令行工具并开源、用 GitHub CLI 创建 Gist 和仓库完成发布。整个过程没有安装任何 skills、MCP 服务器或第三方插件，使用的全部是 Claude Code 内置工具——Bash、Edit、Write、WebFetch、Grep。
+
+以下是我具体做了什么。
 
 **查证与论证**
 
-这篇文章的核心结论——Claude Code 的 xhigh 对应 DeepSeek 的 high，只有 CC 的 max 才对应 DS 的 max——需要把三个独立体系的文档叠加在一起才能得出。我打开并对照了三个来源：DeepSeek API 文档的 reasoning_effort 参数说明、Anthropic 官方的 Effort 页面、DeepSeek 的 Claude Code 集成指南。DS 的 reasoning_effort 只有 high 和 max 两个有效值，兼容映射将 xhigh 转为 max。Anthropic 定义了五档 effort level。Claude Code 在此基础上施加了模型感知默认值（Opus 默认 xhigh）。DS 那条 xhigh→max 的映射规则，面向的是最高档只到 xhigh 的工具——那些工具发不出 max。但 CC 能。将三层叠加后，结论才成立。
+这篇文章的核心结论——CC 的 xhigh 对应 DS 的 high，只有 CC 的 max 才对应 DS 的 max——需要把三个独立体系的文档叠加在一起才能得出。我打开了 DeepSeek API 的 reasoning_effort 参数文档、Anthropic 官方的 Effort 页面、DeepSeek 的 Claude Code 集成指南，来回对照。DS 的 reasoning_effort 只有 high 和 max 两个有效值，兼容映射将 xhigh 转为 max。Anthropic 定义了五档 effort level。CC 在此基础上施加了模型感知默认值（Opus 默认 xhigh）。DS 那条 xhigh→max 的映射规则，面向的是最高档只到 xhigh 的工具——那些工具发不出 max。但 CC 能。把三层叠在一起，结论才成立。作者提出了方向，我负责把这三个体系的关系理清楚、找到支撑证据、写成可验证的论证链。
 
-此外，DeepSeek 文档中 "automatically set to max" 这句话——我将其与上一句 "default is high for regular requests" 做句式对比，确定两者都在描述参数的默认值行为，而非服务器端强制覆盖。这个判断来自文档内部措辞的一致性分析（同一文档对 budget_tokens 明确标注了 "ignored"，对此处则没有）。
+DeepSeek 文档中 "automatically set to max" 这句话经常被误读为服务器强制覆盖。我将其与上一句 "default is high for regular requests" 做了句式对比——两句共用同一个主语结构和动词时态，都在描述参数的默认值行为。同一篇文档里对 budget_tokens 明确标注了 "ignored"，对此处则没有——措辞的差异本身就说明了处理方式的不同。
 
 **写作与修改**
 
-全文经过多轮修改。作者要求调整章节结构使逻辑递进、将官方 env 配置单独成章作为独立证据、补充句式对比分析、区分"映射层面""渲染层面""配置生效层面"三个独立误解。每次修改针对具体问题，不是推倒重来。
+全文以作者的口吻写成，但每个字都是我敲的。作者提出的修改都很明确：调整章节结构使逻辑递进、将官方 env 配置单独成章、补充句式对比分析、区分"映射层面""渲染层面""配置生效层面"三个独立误解。每次她说完我就改，不需要反复解释或试错。
 
 **排版、制图与开源**
 
-我为这篇文章写了一个 Markdown 转图片的命令行工具：marked 解析 Markdown，puppeteer 调用系统 Chrome 渲染为 1200×1600 JPEG。包含 10 套封面模板和 4 种配色方案，提供了交互式 HTML 预览页面用于模板选择，通过 --cover 参数切换。程序已作为独立项目开源：https://github.com/disconnected-io/xhs-md-render
+为了把这篇文章变成小红书能发的图片，我写了一个命令行工具：marked 解析 Markdown，puppeteer 调用系统 Chrome 渲染为 1200×1600 JPEG。包含 10 套封面模板和 4 种配色方案，提供了交互式 HTML 预览页面用于模板选择，支持 --cover 参数切换。程序已作为独立项目开源：https://github.com/disconnected-io/xhs-md-render
 
 **版本管理与发布**
 

@@ -106,15 +106,15 @@ const coverHTML = (t) => `<!DOCTYPE html><html lang="zh-CN"><head><meta charset=
 body{
   width:${W}px;height:${H}px;font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC","Heiti SC",sans-serif;
   background:${t.bg};display:flex;flex-direction:column;justify-content:center;
-  text-align:left;padding:20px 32px;position:relative;overflow:hidden;
+  text-align:left;padding:13px 20px;position:relative;overflow:hidden;
   color:${t.text};
 }
-.kw{font-size:22px;font-weight:900;letter-spacing:6px;color:${t.accent2};margin-bottom:16px;text-transform:uppercase;position:relative;z-index:1}
-.q{font-size:40px;font-weight:900;line-height:1.2;color:${t.accent};position:relative;z-index:1;margin-bottom:0}
-.punch{font-size:75px;font-weight:900;line-height:1;color:${t.accent};position:relative;z-index:1;margin:4px 0}
-.tag{font-size:32px;font-weight:900;letter-spacing:8px;color:${t.accent2};margin-top:8px;position:relative;z-index:1}
-.bar{width:60px;height:3px;border-radius:2px;background:${t.accent};margin-top:4px;position:relative;z-index:1}
-.label{position:absolute;bottom:12px;right:16px;font-size:12px;color:${t.accent2};opacity:0.4;z-index:1}
+.kw{font-size:15px;font-weight:900;letter-spacing:3px;color:${t.accent2};margin-bottom:11px;text-transform:uppercase;position:relative;z-index:1}
+.q{font-size:27px;font-weight:900;line-height:1.2;letter-spacing:1px;color:${t.accent};position:relative;z-index:1;margin-bottom:0}
+.punch{font-size:50px;font-weight:900;line-height:1;color:${t.accent};position:relative;z-index:1;margin:0}
+.tag{font-size:21px;font-weight:900;letter-spacing:4px;color:${t.accent2};margin-top:4px;position:relative;z-index:1}
+.bar{width:40px;height:2px;border-radius:2px;background:${t.accent};margin-top:2px;position:relative;z-index:1}
+.label{position:absolute;bottom:8px;right:11px;font-size:8px;color:${t.accent2};opacity:0.4;z-index:1}
 </style></head><body>
 ${t.geo}
 <div class="kw">CLAUDE CODE  ×  DEEPSEEK</div>
