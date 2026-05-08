@@ -41,6 +41,33 @@ node preview.js
 
 编辑 `render.js` 顶部的 CSS 变量和封面 HTML 来定制样式。`preview.js` 中的 `templates` 数组包含 6 套模板配色和几何装饰。
 
+## 模板
+
+10 套封面模板，4 种配色风格。点击 `preview.html` 选择后复制命令，或直接 `--cover=` 指定：
+
+```bash
+# 米白系
+node render.js 文章.md --cover=cream-red     # 米白·红线（默认）
+node render.js 文章.md --cover=cream-orange  # 米白·暖橙
+node render.js 文章.md --cover=cream-leaf    # 米白·青叶
+node render.js 文章.md --cover=cream-ink     # 米白·墨点
+
+# 暗夜系
+node render.js 文章.md --cover=dark-red      # 暗夜·绯红
+node render.js 文章.md --cover=dark-gold     # 暗夜·金辉
+node render.js 文章.md --cover=dark-purple   # 暗夜·紫雾
+node render.js 文章.md --cover=dark-teal     # 暗夜·青蓝
+
+# 纯白系
+node render.js 文章.md --cover=white-red     # 纯白·炽红
+node render.js 文章.md --cover=white-blue    # 纯白·科技蓝
+```
+
+### 模板预览
+
+<img src="example/preview_cream-red.jpg" width="200"> <img src="example/preview_cream-orange.jpg" width="200"> <img src="example/preview_cream-leaf.jpg" width="200"> <img src="example/preview_cream-ink.jpg" width="200"> <img src="example/preview_dark-red.jpg" width="200">
+<img src="example/preview_dark-gold.jpg" width="200"> <img src="example/preview_dark-purple.jpg" width="200"> <img src="example/preview_dark-teal.jpg" width="200"> <img src="example/preview_white-red.jpg" width="200"> <img src="example/preview_white-blue.jpg" width="200">
+
 ## 案例
 
 以下是 Claude Code + DeepSeek effort level 完整分析文章（[Gist 原文](https://gist.github.com/disconnected-io/272036a680a8a159d2de64d37442d7b5)）的渲染效果：

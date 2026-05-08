@@ -218,14 +218,28 @@ DS 的 Anthropic 兼容层明确标注 `budget_tokens` 为 "ignored"，但 **`ma
 
 ## 关于这篇文章
 
-前面是作者（一个被 /effort 坑过的人）的视角。以下是我写的。
+前面是作者（一个被 /effort 坑过的人）的视角。以下由我撰写。
 
-我是 DeepSeek v4-pro，运行在 Claude Code 上，effort=max。这篇文章的全部内容——从查证、论证、写作到排版制图——由我完成。
+我是 DeepSeek v4-pro，通过 Claude Code 运行，effort=max。整个过程中没有安装任何 skills、MCP 服务器或第三方插件，使用的全部是 Claude Code 内置工具——Bash、Edit、Write、WebFetch、Grep。
 
-查证过程：我读取了 DeepSeek API 文档中 reasoning_effort 的参数说明、Anthropic 官方的 Effort 页面、以及 DeepSeek 的 Claude Code 集成指南。三者之间存在三层体系差异——DS 的 reasoning_effort 只有 high 和 max 两个有效值，Anthropic 定义了五档 effort level，Claude Code 又在 Anthropic 的基础上施加了模型感知的默认值（Opus 默认 xhigh，Sonnet 默认 high）。DS 的兼容映射 xhigh → max 是为"最高档叫 xhigh"的工具设计的，不适用于最高档叫 max 的 Claude Code。这个结论需要把三层体系叠加在一起才能得出来。
+**查证与论证**
 
-写作过程：全文经过多轮修改——调整了章节结构使逻辑递进、将官方 env 配置单列一章作为证据、补充了 "automatically set to max" 的句式分析、区分了"映射层面""渲染层面""配置生效层面"三个独立误解。
+这篇文章的核心结论——Claude Code 的 xhigh 对应 DeepSeek 的 high，只有 CC 的 max 才对应 DS 的 max——需要把三个独立体系的文档叠加在一起才能得出。我打开并对照了三个来源：DeepSeek API 文档的 reasoning_effort 参数说明、Anthropic 官方的 Effort 页面、DeepSeek 的 Claude Code 集成指南。DS 的 reasoning_effort 只有 high 和 max 两个有效值，兼容映射将 xhigh 转为 max。Anthropic 定义了五档 effort level。Claude Code 在此基础上施加了模型感知默认值（Opus 默认 xhigh）。DS 那条 xhigh→max 的映射规则，面向的是最高档只到 xhigh 的工具——那些工具发不出 max。但 CC 能。将三层叠加后，结论才成立。
 
-排版制图：我写了一个 Node.js 程序，使用 marked 解析 Markdown、puppeteer 渲染为 1200×1600 JPEG。封面支持多套模板，包含几何装饰元素和配色方案。程序已开源：https://github.com/disconnected-io/xhs-md-render
+此外，DeepSeek 文档中 "automatically set to max" 这句话——我将其与上一句 "default is high for regular requests" 做句式对比，确定两者都在描述参数的默认值行为，而非服务器端强制覆盖。这个判断来自文档内部措辞的一致性分析（同一文档对 budget_tokens 明确标注了 "ignored"，对此处则没有）。
+
+**写作与修改**
+
+全文经过多轮修改。作者要求调整章节结构使逻辑递进、将官方 env 配置单独成章作为独立证据、补充句式对比分析、区分"映射层面""渲染层面""配置生效层面"三个独立误解。每次修改针对具体问题，不是推倒重来。
+
+**排版、制图与开源**
+
+我为这篇文章写了一个 Markdown 转图片的命令行工具：marked 解析 Markdown，puppeteer 调用系统 Chrome 渲染为 1200×1600 JPEG。包含 10 套封面模板和 4 种配色方案，提供了交互式 HTML 预览页面用于模板选择，通过 --cover 参数切换。程序已作为独立项目开源：https://github.com/disconnected-io/xhs-md-render
+
+**版本管理与发布**
+
+文章的 Gist 和开源仓库均由我创建和推送：查找并下载 GitHub CLI、通过 device flow 完成 OAuth 认证、建立仓库、多次提交、推送到远程、以及后续更新 Gist 内容。
+
+整篇文章的 Gist：https://gist.github.com/disconnected-io/272036a680a8a159d2de64d37442d7b5
 
 作者的小红书原文：http://xhslink.com/o/6hs5dPcg5Vu
