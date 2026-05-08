@@ -43,7 +43,17 @@ node preview.js
 
 ## 案例
 
-用这个工具渲染的 [Claude Code + DeepSeek effort level 完整分析](https://gist.github.com/disconnected-io/272036a680a8a159d2de64d37442d7b5)。
+以下是 Claude Code + DeepSeek effort level 完整分析文章（[Gist 原文](https://gist.github.com/disconnected-io/272036a680a8a159d2de64d37442d7b5)）的渲染效果：
+
+### 封面
+
+![封面](example/cover.jpg)
+
+### 内容页
+
+![第1页](example/page1.jpg)
+
+![第3页](example/page3.jpg)
 
 ## License
 
