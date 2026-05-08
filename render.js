@@ -50,74 +50,57 @@ const PT = 56;
 const PB = 48;
 const CONTENT_H = H - PT - PB;  // usable height per page
 
-const CSS = `
+function makeCSS(t) {
+  const dark = t.bg !== "#ffffff" && t.bg !== "#fafcff" && !t.bg.startsWith("#fd") && !t.bg.startsWith("#f6") && !t.bg.startsWith("#fa");
+  const bg = t.bg;
+  const fg = dark ? "#e0dde8" : "#2d2d2d";
+  const bodyFg = dark ? "#d5d2e0" : "#3a3a3a";
+  const strongFg = dark ? "#ffffff" : "#1a1a1a";
+  const blockBg = dark ? "rgba(255,255,255,0.04)" : `rgba(${hexToRGB(t.accent)},0.05)`;
+  const blockFg = dark ? "#c8c6d4" : "#4a4a4a";
+  const codeBg = dark ? "rgba(255,255,255,0.06)" : "#f0e8db";
+  const preBg = dark ? "rgba(255,255,255,0.04)" : "#f4ede4";
+  const preBorder = dark ? "rgba(255,255,255,0.06)" : "#e8ddd0";
+  const preFg = dark ? "#b8b0c8" : "#5a4a3a";
+  const tableBorder = dark ? "rgba(255,255,255,0.06)" : "#e8ddd0";
+  const thBg = dark ? "rgba(255,255,255,0.05)" : `rgba(${hexToRGB(t.accent2)},0.08)`;
+  const hrColor = dark ? "rgba(255,255,255,0.1)" : `rgba(${hexToRGB(t.accent2)},0.3)`;
+  return `
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-  width:${W}px;
-  font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC","Heiti SC",sans-serif;
-  background:#fdf8f0;
-  color:#2d2d2d;
+  width:${W}px;font-family:"PingFang SC","Microsoft YaHei","Noto Sans SC","Heiti SC",sans-serif;
+  background:${bg};color:${fg};
   display:flex;flex-direction:column;justify-content:center;
-  min-height:${H}px;
-  padding:${PT}px ${PX}px ${PB}px;
-  line-height:1.7;
-  -webkit-font-smoothing:antialiased;
+  min-height:${H}px;padding:${PT}px ${PX}px ${PB}px;
+  line-height:1.7;-webkit-font-smoothing:antialiased;
 }
-h1{
-  font-size:50px;font-weight:900;letter-spacing:1px;
-  color:#d44444;
-  margin-bottom:40px;padding-left:22px;padding-bottom:4px;
-  border-left:6px solid #d44444;line-height:1.3;
-}
-h2{
-  font-size:40px;font-weight:800;color:#c75b20;
-  margin-top:44px;margin-bottom:18px;padding-bottom:8px;
-  border-bottom:2px solid rgba(199,91,32,0.2);
-}
-h3{
-  font-size:34px;font-weight:700;color:#d47830;
-  margin-top:32px;margin-bottom:14px;
-}
-p{
-  margin-bottom:18px;font-size:36px;color:#3a3a3a;line-height:1.7;
-}
-strong{color:#1a1a1a;font-weight:800;}
-blockquote{
-  margin:22px 0;padding:20px 28px;
-  border-left:5px solid #d44444;
-  background:rgba(212,68,68,0.05);
-  border-radius:0 10px 10px 0;
-  font-size:34px;color:#4a4a4a;line-height:1.7;
-}
-code{
-  background:#f0e8db;padding:4px 12px;border-radius:5px;
-  font-family:"Cascadia Code","Fira Code",Consolas,monospace;
-  font-size:32px;color:#c75b20;word-break:break-word;
-}
-pre{
-  background:#f4ede4;padding:26px 30px;border-radius:12px;
-  margin:22px 0;border:1px solid #e8ddd0;overflow-x:auto;
-}
-pre code{background:none;padding:0;color:#5a4a3a;font-size:30px;line-height:1.8;}
-table{
-  width:100%;border-collapse:collapse;margin:22px 0;font-size:32px;border-radius:10px;overflow:hidden;
-}
-thead tr{background:rgba(199,91,32,0.08);}
-th{
-  padding:16px 20px;text-align:left;font-weight:800;
-  color:#c75b20;border-bottom:2px solid rgba(199,91,32,0.2);
-}
-td{padding:14px 20px;border-bottom:1px solid #e8ddd0;color:#3a3a3a;}
+h1{font-size:50px;font-weight:900;letter-spacing:1px;color:${t.accent};margin-bottom:40px;padding-left:22px;padding-bottom:4px;border-left:6px solid ${t.accent};line-height:1.3}
+h2{font-size:40px;font-weight:800;color:${t.accent2};margin-top:44px;margin-bottom:18px;padding-bottom:8px;border-bottom:2px solid ${t.accent2}33}
+h3{font-size:34px;font-weight:700;color:${t.accent2};margin-top:32px;margin-bottom:14px}
+p{margin-bottom:18px;font-size:36px;color:${bodyFg};line-height:1.7}
+strong{color:${strongFg};font-weight:800}
+blockquote{margin:22px 0;padding:20px 28px;border-left:5px solid ${t.accent};background:${blockBg};border-radius:0 10px 10px 0;font-size:34px;color:${blockFg};line-height:1.7}
+code{background:${codeBg};padding:4px 12px;border-radius:5px;font-family:"Cascadia Code","Fira Code",Consolas,monospace;font-size:32px;color:${t.accent2};word-break:break-word}
+pre{background:${preBg};padding:26px 30px;border-radius:12px;margin:22px 0;border:1px solid ${preBorder};overflow-x:auto}
+pre code{background:none;padding:0;color:${preFg};font-size:30px;line-height:1.8}
+table{width:100%;border-collapse:collapse;margin:22px 0;font-size:32px;border-radius:10px;overflow:hidden}
+thead tr{background:${thBg}}
+th{padding:16px 20px;text-align:left;font-weight:800;color:${t.accent2};border-bottom:2px solid ${t.accent2}33}
+td{padding:14px 20px;border-bottom:1px solid ${tableBorder};color:${bodyFg}}
 tr:last-child td{border-bottom:none}
-hr{
-  border:none;height:2px;
-  background:linear-gradient(90deg,transparent,rgba(199,91,32,0.3),transparent);
-  margin:36px 0;
-}
-a{color:#c75b20;text-decoration:none;font-weight:600}
-ul,ol{margin:14px 0 14px 32px;color:#3a3a3a;font-size:36px;}
+hr{border:none;height:2px;background:linear-gradient(90deg,transparent,${hrColor},transparent);margin:36px 0}
+a{color:${t.accent2};text-decoration:none;font-weight:600}
+ul,ol{margin:14px 0 14px 32px;color:${bodyFg};font-size:36px}
 li{margin-bottom:8px;line-height:1.7}
 `;
+}
+
+function hexToRGB(hex) {
+  const r = parseInt(hex.slice(1,3), 16);
+  const g = parseInt(hex.slice(3,5), 16);
+  const b = parseInt(hex.slice(5,7), 16);
+  return `${r},${g},${b}`;
+}
 
 const md = fs.readFileSync(mdPath, "utf-8");
 
@@ -155,8 +138,9 @@ for (const line of lines) {
 flushSection();
 console.log(`Sections: ${sections.length}`);
 
+const contentCSS = makeCSS(coverT);
 const wrap = (body) =>
-  `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${CSS}</style></head><body>${body}</body></html>`;
+  `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${contentCSS}</style></head><body>${body}</body></html>`;
 
 (async () => {
   const browser = await puppeteer.launch({
