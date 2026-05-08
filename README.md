@@ -45,13 +45,12 @@ node preview.js
 
 以下是 Claude Code + DeepSeek effort level 完整分析文章（[Gist 原文](https://gist.github.com/disconnected-io/272036a680a8a159d2de64d37442d7b5)）的渲染效果：
 
-<img src="example/cover.jpg" width="360" alt="封面">
-<img src="example/page1.jpg" width="360" alt="第1页">
-<img src="example/page3.jpg" width="360" alt="第3页">
-<img src="example/page5.jpg" width="360" alt="第5页">
-<img src="example/page8.jpg" width="360" alt="第8页">
-<img src="example/page12.jpg" width="360" alt="第12页">
-<img src="example/page17.jpg" width="360" alt="第17页">
+<img src="example/page0.jpg" width="300"> <img src="example/page1.jpg" width="300"> <img src="example/page2.jpg" width="300">
+<img src="example/page3.jpg" width="300"> <img src="example/page4.jpg" width="300"> <img src="example/page5.jpg" width="300">
+<img src="example/page6.jpg" width="300"> <img src="example/page7.jpg" width="300"> <img src="example/page8.jpg" width="300">
+<img src="example/page9.jpg" width="300"> <img src="example/page10.jpg" width="300"> <img src="example/page11.jpg" width="300">
+<img src="example/page12.jpg" width="300"> <img src="example/page13.jpg" width="300"> <img src="example/page14.jpg" width="300">
+<img src="example/page15.jpg" width="300"> <img src="example/page16.jpg" width="300"> <img src="example/page17.jpg" width="300">
 
 ## License
 
