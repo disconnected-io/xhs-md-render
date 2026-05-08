@@ -79,6 +79,10 @@ node render.js 文章.md --cover=white-blue    # 纯白·科技蓝
 <img src="example/page12.jpg" width="300"> <img src="example/page13.jpg" width="300"> <img src="example/page14.jpg" width="300">
 <img src="example/page15.jpg" width="300"> <img src="example/page16.jpg" width="300"> <img src="example/page17.jpg" width="300">
 
+## 为什么开源
+
+本来只是为了给一篇文章配图，结果小红书死活发不出 18 张图——审核、限流、折叠轮着来。图都做好了，不发可惜，干脆把工具开源了。没什么技术含量，能用就行。
+
 ## License
 
 MIT
