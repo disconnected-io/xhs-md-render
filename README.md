@@ -35,7 +35,7 @@ node render.js <你的文章.md>
 node preview.js
 ```
 
-在浏览器中打开 `preview.html` 对比 6 套封面模板，选好编号后配置 `render.js` 中的封面模板。
+在浏览器中打开 `preview.html` 对比 10 套封面模板，选好编号后配置 `render.js` 中的封面模板。
 
 ## 自定义
 
