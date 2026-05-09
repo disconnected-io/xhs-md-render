@@ -173,7 +173,7 @@ ${t.geo}
     .cmd{color:#aaa;text-align:center;margin-top:12px;font-size:13px;font-family:monospace}
   </style></head><body>
     <h1>封面模板预览 — 点击选择</h1>
-    <div class="sub">共 ${templates.length} 套模板 · 4 种配色风格</div>
+    <div class="sub">共 ${templates.length} 套模板 · 3 种配色风格</div>
     <div class="sel" id="sel-label">当前未选择</div>
     <div class="grid">${cards}</div>
     <div class="btn-bar"><span class="btn" onclick="apply()">使用选中模板渲染</span></div>
